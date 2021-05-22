@@ -1,0 +1,13 @@
+WITH 
+     Multi (login, name, day, quest) AS (
+          SELECT P.login, P.name, A.day, COUNT(*) AS quest
+     	  FROM Player P, Actor A
+	  WHERE  P.login = A.login
+	  GROUP BY P.login, P.name, A.day
+	  HAVING COUNT(*) > 1
+	  ORDER BY login, name, day
+     )
+
+SELECT M.login, M.name, A.day, A.realm, A.theme
+FROM Multi M, Actor A
+WHERE M.login = A.login AND M.day = A.day;

@@ -1,0 +1,30 @@
+WITH
+
+WonLoot (realm, race, gender, name, sql) AS
+(SELECT l.realm, a.race, a.gender, v.name, t.sql
+FROM Avatar a, Loot l, Visit v, Treasure t
+WHERE l.login = v.login
+AND l.realm = v.realm
+AND l.day = v.day
+AND a.login = l.login
+AND a.name = v.name
+AND l.treasure = t.treasure
+ORDER BY realm),
+
+SumSql (realm, race, gender, total) AS
+(SELECT realm, race, gender, SUM(sql) AS total
+FROM WonLoot
+GROUP BY realm, race, gender
+ORDER BY realm, race, gender),
+
+MaxGender (realm, race, total) AS
+(SELECT realm, race, MAX(total) AS total
+FROM SumSql
+GROUP BY realm, race
+ORDER BY realm, race)
+
+SELECT m.realm, m.race, s.gender, m.total
+FROM SumSql s, MaxGender m
+WHERE s.realm = m.realm
+AND s.total = m.total
+ORDER BY m.realm, m.race, s.gender;

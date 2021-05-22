@@ -1,0 +1,9 @@
+select Q.theme, Q.day, Q.realm, Q.succeeded
+from quest Q, realm R
+where Q.succeeded not in (
+              select S.succeeded 
+              from quest S
+              where S.succeeded = Q.succeeded 
+                 and S.succeeded < '20:00:00')
+    and Q.realm = R.realm
+order by Q.theme, Q.day, Q.realm;

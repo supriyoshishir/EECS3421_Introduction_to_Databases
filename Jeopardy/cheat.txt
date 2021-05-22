@@ -1,0 +1,10 @@
+SELECT x.login, x.name, x.day, a.realm, a.theme
+FROM Actor a,
+(SELECT p.login, p.name, b.day
+FROM Player p, Actor b
+WHERE  p.login = b.login
+GROUP BY p.login, p.name, b.day
+HAVING COUNT(*) > 1) x
+WHERE x.login = a.login
+AND x.day = a.day
+ORDER BY login, name, day, realm, theme;

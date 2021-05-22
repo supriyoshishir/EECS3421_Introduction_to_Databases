@@ -1,0 +1,100 @@
+-- ===================================================================
+-- Contact Tracing DB
+-- Schema - Creation script
+-- Supriyo Ghosh, November 2020
+-- ===================================================================
+
+create table Person (
+sin char(9) not null,
+name varchar,
+address varchar,
+phone varchar not null,
+constraint Person_PK primary key (sin)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table Place (
+name varchar not null,
+gps varchar,
+description varchar,
+address varchar not null,
+constraint Place_PK primary key (name)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table TimeSlot (
+time timestamp not null,
+constraint TimeSlot_PK primary key (time)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table Method (
+method varchar not null,
+constraint Method_PK primary key (method)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table Recon (
+sin char(9) not null,
+placename varchar not null,
+time timestamp not null,
+method varchar not null,
+constraint Recon_PK primary key (sin, placename, time, method),
+constraint Recon_Person_FK foreign key (sin) references Person,
+constraint Recon_Place_FK foreign key (placename) references Place (name),
+constraint Recon_TimeSlot_FK foreign key (time) references TimeSlot,
+constraint Recon_Method_FK foreign key (method) references Method
+);
+-- ------------------------------------------------------------------------------------------------------
+
+create table Action (
+action varchar not null,
+constraint Action_PK primary key (action)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table TestType (
+testtype varchar not null,
+constraint TestType_PK primary key (testtype)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table TestCentre (
+name varchar not null,
+gps varchar,
+description varchar,
+address varchar not null,
+constraint TestCentre_PK primary key (name)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table Test (
+sin char(9) not null,
+time timestamp not null,
+action varchar,
+testtype varchar,
+testcentre varchar,
+constraint Test_PK primary key (sin, time),
+constraint Test_Person_FK foreign key (sin) references Person,
+constraint Test_TimeSlot_FK foreign key (time) references TimeSlot,
+constraint Test_Action_FK foreign key (action) references Action,
+constraint Test_TestType_FK foreign key (testtype) references TestType,
+constraint Test_TestCentre_FK foreign key (testcentre) references TestCentre (name)
+);
+
+-- ------------------------------------------------------------------------------------------------------
+
+create table Offer (
+testtype varchar not null,
+testcentre varchar not null,
+constraint Offer_PK primary key (testtype, testcentre),
+constraint Test_TestType_FK foreign key (testtype) references TestType,
+constraint Test_TestCentre_FK foreign key (testcentre) references TestCentre (name)
+);

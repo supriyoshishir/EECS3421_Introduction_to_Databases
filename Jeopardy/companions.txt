@@ -1,0 +1,84 @@
+WITH
+
+Companion AS
+(SELECT DISTINCT cf.login AS companion1, af.name AS fname, q.realm, cl.login AS companion2, al.name AS lname
+FROM Avatar af, Avatar al, Actor cf, Actor cl, Visit vf, Visit vl, Quest q
+WHERE cf.theme = cl.theme
+AND cf.day = cl.day
+AND cf.realm = cl.realm
+AND cf.login = af.login
+AND cl.login = al.login
+AND cf.theme = q.theme
+AND cf.day = q.day
+AND cf.realm = q.realm
+AND cl.theme = q.theme
+AND cl.day = q.day
+AND cl.realm = q.realm
+AND cl.login > cf.login
+AND cf.login = vf.login
+AND cf.realm = vf.realm
+AND cf.day = vf.day
+AND cl.login = vl.login
+AND cl.realm = vl.realm
+AND cl.day = vl.day
+AND vf.login = af.login
+AND vf.name = af.name
+AND vl.login = al.login
+AND vl.name = al.name),
+		
+Play AS
+(SELECT DISTINCT c.companion1, c.fname, c.realm, c.companion2, c.lname
+FROM Companion c
+WHERE NOT EXISTS
+(SELECT Ac.realm, Ac.day, Ac.theme
+FROM Avatar Av, Actor Ac, Visit V
+WHERE Av.login = Ac.login
+AND V.name = Av.name
+AND V.login = Av.login
+AND V.day = Ac.day
+AND V.login = Ac.login
+AND V.realm = Ac.realm
+AND c.companion1 = Av.login
+AND c.fname = Av.name
+AND c.realm = Ac.realm
+EXCEPT
+SELECT Ac2.realm, Ac2.day, Ac2.theme
+FROM Avatar Av2, Actor Ac2, Visit V2
+WHERE Av2.login = Ac2.login
+AND V2.name = Av2.name
+AND V2.login = Av2.login
+AND V2.day = Ac2.day
+AND V2.login = Ac2.login
+AND V2.realm = Ac2.realm
+AND c.companion2 = Av2.login
+AND c.lname = Av2.name
+AND c.realm = Ac2.realm)
+AND NOT EXISTS
+(SELECT Ac2.realm, Ac2.day, Ac2.theme
+FROM Avatar Av2, Actor Ac2, Visit V2
+WHERE Av2.login = Ac2.login
+AND V2.name = Av2.name
+AND V2.login = Av2.login
+AND V2.day = Ac2.day
+AND V2.login = Ac2.login
+AND V2.realm = Ac2.realm
+AND c.companion2 = Av2.login
+AND c.lname = Av2.name
+AND c.realm = Ac2.realm
+EXCEPT
+SELECT Ac.realm, Ac.day, Ac.theme
+FROM Avatar Av, Actor Ac, Visit V
+WHERE Av.login = Ac.login
+AND V.name = Av.name
+AND V.login = Av.login
+AND V.day = Ac.day
+AND V.login = Ac.login
+AND V.realm = Ac.realm
+AND c.companion1 = Av.login
+AND c.fname = Av.name
+AND c.realm = Ac.realm)
+ORDER BY realm, companion1, fname, companion2, lname)
+
+SELECT *
+FROM Play
+ORDER BY realm, companion1, fname, companion2, lname;

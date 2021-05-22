@@ -1,0 +1,14 @@
+WITH
+Count (login, avatars) AS
+(SELECT p.login, count(*)
+FROM Player p, Avatar a
+WHERE p.login = a.login 
+GROUP BY p.login)
+
+SELECT p.login, p.name, p.gender, c.avatars
+FROM Player p, Avatar a, Count c
+WHERE p.login = a.login
+AND p.login = c.login
+AND p.gender != a.gender
+GROUP BY p.login, p.name, p.gender, c.avatars
+ORDER BY p.login;

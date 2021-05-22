@@ -1,0 +1,74 @@
+WITH
+
+Visitors (login, name, realm, day, theme) AS
+(SELECT v.login, v.name, v.realm, v.day, a.theme
+FROM Visit v, Actor a
+WHERE v.login = a.login
+AND v.realm = a.realm
+AND v.day = a.day
+ORDER BY v.login, v.name, v.realm, v.day, a.theme),
+
+TotalQuests (login, name, total) AS
+(SELECT v.login, v.name, count(*) AS total
+FROM Visitors v, Quest q
+WHERE v.theme = q.theme
+AND v.realm = q.realm
+AND v.day = q.day
+AND q.succeeded IS NOT NULL
+GROUP BY v.login, v.name),
+
+Received (theme, realm, day, sql) AS
+(SELECT l.theme, l.realm, l.day, t.sql
+FROM Loot l, Treasure t, quest q
+where l.treasure = t.treasure
+AND q.theme = l.theme
+AND q.realm = l.realm
+AND q.day = l.day
+AND q.succeeded IS NOT NULL
+ORDER BY l.theme, l.realm, l.day, t.sql),
+
+Max (theme, realm, day, max) AS
+(SELECT r.theme, r.realm, r.day, MAX(r.sql)
+FROM Received r
+GROUP BY r.theme, r.realm, r.day),
+
+PlayerWithMax (login, name, maxsql) AS
+(SELECT v.login, v.name, SUM(m.max)
+FROM Max m, Visitors v
+where v.realm = m.realm
+AND v.theme = m.theme
+AND v.day = m.day
+group by v.login, v.name),
+
+Info (login, name, race) AS
+(SELECT a.login, a.name, a.race
+FROM Actor c, Avatar a
+WHERE c.login = a.login
+ORDER BY a.login, a.name, a.race),
+
+TableZero (login, name) AS
+(SELECT login, name
+FROM Avatar a
+EXCEPT
+SELECT v.login, v.name
+FROM PlayerWithMax v),
+
+Merge (login, name, race, sql, total) AS
+(SELECT p.login, p.name, i.race, p.maxsql, t.total
+FROM PlayerWithMax p, TotalQuests t, Info i
+where p.login = t.login
+AND i.login = p.login
+AND i.name = p.name
+AND i.login = t.login
+AND i.name = t.name
+AND p.name = t.name
+
+UNION
+SELECT z.login, z.name, i.race, 0, 0
+FROM TableZero z, Info i
+WHERE i.login = z.login
+AND i.name = z.name)
+
+SELECT m.login, m.name, m.race, m.sql AS earned, m.total AS quests
+FROM Merge m
+ORDER BY m.login, m.name;

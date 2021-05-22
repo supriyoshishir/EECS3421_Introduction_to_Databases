@@ -1,0 +1,7 @@
+SELECT DISTINCT actor.realm, actor.day, actor.theme
+FROM loot, actor
+WHERE loot.treasure like 'Gold%' 
+	and actor.login = loot.login
+	and actor.day = loot.day
+	and actor.theme = loot.theme
+ORDER BY actor.day, actor.realm, actor.theme;

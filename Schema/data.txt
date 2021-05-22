@@ -1,0 +1,121 @@
+-- ===================================================================
+-- Contact Tracing DB
+-- Data - Populate script
+-- Supriyo Ghosh, November 2020
+-- ===================================================================
+
+insert into Person (sin, name, address, phone) values
+('123456001', 'James Smith', 	'Toronto', 	'647-111-0001'),
+('123456002', 'Jennifer Clark', 'Mississauga', 	'647-111-0002'),
+('123456003', 'Robert Brown', 	'Brampton', 	'647-111-0003'),
+('123456004', 'Briana Carter', 	'Markham', 	'647-111-0004'),
+('123456005', 'David Lewis', 	'Vaughan', 	'647-111-0005'),
+('123456006', 'Rachel Cooper', 	'Burlington', 	'647-111-0006'),
+('123456007', 'Steven Parker', 	'Oakville', 	'647-111-0007'),
+('123456008', 'Sandra Miller', 	'Oshawa', 	'647-111-0008'),
+('123456009', 'Mark Jones', 	'Ajax', 	'647-111-0009'),
+('123456010', 'Andrea Wright', 	'Caledon', 	'647-111-0010');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Place (name, gps, description, address) values
+('Humber River Hospital', 	'43.72410,-79.48850', 'Hospital', 	'1235 Wilson Ave, North York, ON M3M 3G7'),
+('Mount Sinai Hospital', 	'43.70010,-79.41630', 'Hospital', 	'600 University Ave, Toronto, ON M5G 1X5'),
+('Toronto General Hospital', 	'43.65850,-79.38810', 'Hospital', 	'200 Elizabeth St, Toronto, ON M5G 2C4'),
+('Canadian National Tower', 	'43.64256,-79.38924', 'Tower', 		'290 Bremner Blvd, Toronto, ON M5V 3L9'),
+('Art Gallery of Ontario', 	'43.65360,-79.39470', 'Gallery', 	'317 Dundas St W, Toronto, ON M5T 1G4'),
+('Royal Ontario Museum', 	'43.66770,-79.39696', 'Museum', 	'100 Queens Park, Toronto, ON M5S 2C6');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into TimeSlot (time) values
+('2020-10-31 10:00:00'),
+('2020-10-31 10:15:00'),
+('2020-10-31 10:30:00'),
+('2020-10-31 10:45:00'),
+('2020-10-31 11:00:00'),
+('2020-10-31 11:15:00'),
+('2020-10-31 11:30:00'),
+('2020-10-31 11:45:00'),
+('2020-10-31 12:00:00'),
+('2020-10-31 12:15:00'),
+('2020-10-31 12:30:00'),
+('2020-10-31 12:45:00'),
+('2020-10-31 13:00:00'),
+('2020-10-31 13:15:00'),
+('2020-10-31 13:30:00'),
+('2020-10-31 13:45:00'),
+('2020-10-31 14:00:00'),
+('2020-10-31 14:15:00'),
+('2020-10-31 14:30:00'),
+('2020-10-31 14:45:00');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Method (method) values
+('contact-tracing phone app'),
+('surveillance camera'),
+('registry sign in'),
+('registry sign out');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Recon (sin, placename, time, method) values
+('123456001', 'Humber River Hospital', 		'2020-10-31 10:00:00', 'registry sign in'),
+('123456001', 'Humber River Hospital', 		'2020-10-31 10:15:00', 'registry sign out'),
+('123456002', 'Mount Sinai Hospital', 		'2020-10-31 10:30:00', 'registry sign in'),
+('123456002', 'Mount Sinai Hospital', 		'2020-10-31 10:45:00', 'registry sign out'),
+('123456003', 'Toronto General Hospital', 	'2020-10-31 11:00:00', 'registry sign in'),
+('123456003', 'Toronto General Hospital', 	'2020-10-31 11:15:00', 'registry sign out'),
+('123456004', 'Humber River Hospital', 		'2020-10-31 11:30:00', 'registry sign in'),
+('123456004', 'Humber River Hospital', 		'2020-10-31 11:45:00', 'registry sign out'),
+('123456005', 'Mount Sinai Hospital', 		'2020-10-31 12:00:00', 'registry sign in'),
+('123456005', 'Mount Sinai Hospital', 		'2020-10-31 12:15:00', 'registry sign out'),
+('123456006', 'Toronto General Hospital', 	'2020-10-31 12:30:00', 'registry sign in'),
+('123456006', 'Toronto General Hospital', 	'2020-10-31 12:45:00', 'registry sign out'),
+('123456001', 'Canadian National Tower', 	'2020-10-31 13:00:00', 'contact-tracing phone app'),
+('123456002', 'Art Gallery of Ontario', 	'2020-10-31 13:15:00', 'surveillance camera'),
+('123456003', 'Royal Ontario Museum', 		'2020-10-31 13:30:00', 'contact-tracing phone app'),
+('123456004', 'Canadian National Tower', 	'2020-10-31 13:45:00', 'surveillance camera'),
+('123456005', 'Art Gallery of Ontario', 	'2020-10-31 14:00:00', 'contact-tracing phone app'),
+('123456006', 'Royal Ontario Museum', 		'2020-10-31 14:15:00', 'surveillance camera'),
+('123456007', 'Canadian National Tower', 	'2020-10-31 14:30:00', 'contact-tracing phone app'),
+('123456008', 'Art Gallery of Ontario', 	'2020-10-31 14:45:00', 'surveillance camera');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Action (action) values
+('quarantine not required'),
+('quarantine for 1 week'),
+('quarantine for 2 weeks');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into TestType (testtype) values
+('Molecular test'),
+('Antigen test'),
+('Antibody test');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into TestCentre (name, gps, description, address) values
+('Humber River Hospital', 	'43.72410,-79.48850', 'Hospital', '1235 Wilson Ave, North York, ON M3M 3G7'),
+('Mount Sinai Hospital', 	'43.70010,-79.41630', 'Hospital', '600 University Ave, Toronto, ON M5G 1X5'),
+('Toronto General Hospital', 	'43.65850,-79.38810', 'Hospital', '200 Elizabeth St, Toronto, ON M5G 2C4');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Test (sin, time, action, testcentre, testtype) values
+('123456001', '2020-10-31 10:00:00', 'quarantine not required', 'Humber River Hospital', 	'Molecular test'),
+('123456002', '2020-10-31 10:30:00', 'quarantine for 1 week', 	'Mount Sinai Hospital', 	'Antigen test'),
+('123456003', '2020-10-31 11:00:00', 'quarantine for 2 weeks', 	'Toronto General Hospital', 	'Antibody test'),
+('123456004', '2020-10-31 11:30:00', 'quarantine for 2 weeks', 	'Humber River Hospital', 	'Molecular test'),
+('123456005', '2020-10-31 12:00:00', 'quarantine for 1 week', 	'Mount Sinai Hospital', 	'Antigen test'),
+('123456006', '2020-10-31 12:30:00', 'quarantine not required', 'Toronto General Hospital', 	'Antibody test');
+
+-- ------------------------------------------------------------------------------------------------------
+
+insert into Offer (testtype, testcentre) values
+('Molecular test', 	'Humber River Hospital'),
+('Antigen test', 	'Mount Sinai Hospital'),
+('Antibody test', 	'Toronto General Hospital');

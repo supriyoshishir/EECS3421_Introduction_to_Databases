@@ -1,0 +1,5 @@
+SELECT DISTINCT realm, day, theme
+FROM Loot
+WHERE treasure LIKE '%Gold%'
+and login IS NOT NULL
+ORDER BY day, realm, theme;

@@ -1,0 +1,8 @@
+SELECT DISTINCT q.realm, q.day, q.theme
+FROM Quest q, Loot l
+WHERE q.realm = l.realm
+AND q.day = l.day
+AND q.theme = l.theme
+AND l.treasure LIKE '%Gold%'
+AND l.login IS NOT NULL
+ORDER BY day, realm, theme;

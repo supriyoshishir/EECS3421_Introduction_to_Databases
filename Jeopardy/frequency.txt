@@ -1,0 +1,33 @@
+WITH
+
+NumberOfVisits (login, realm, visits) AS
+(SELECT login, realm, count(*)
+FROM Visit
+GROUP BY login, realm
+HAVING COUNT(*) > 1
+ORDER BY login, realm),
+
+FirstDay (login, realm, day) AS
+(SELECT login, realm, min(day)
+FROM Visit 
+GROUP BY login, realm
+ORDER BY login, realm),
+
+LastDay (login, realm, day) AS
+(SELECT login, realm, max(day)
+FROM Visit 
+GROUP BY login, realm
+ORDER BY login, realm),
+
+NumberOfDays (login, realm, days) AS
+(SELECT f.login, f.realm, CAST((l.day::DATE - f.day::DATE) AS DOUBLE PRECISION)
+FROM FirstDay f, LastDay l
+WHERE f.login = l.login
+AND f.realm = l.realm
+ORDER BY login, realm)
+
+SELECT v.login, v.realm, v.visits, CAST((d.days/(v.visits-1)) AS DECIMAL(5,2)) AS frequency
+FROM NumberOfVisits v, NumberOfDays d
+WHERE v.login = d.login
+AND v.realm = d.realm
+ORDER BY v.login, v.realm;

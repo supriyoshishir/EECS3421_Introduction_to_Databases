@@ -1,0 +1,8 @@
+    sin    |        time         |         action          |    testtype    |        testcentre        | offered
+-----------+---------------------+-------------------------+----------------+--------------------------+---------
+ 123456001 | 2020-10-31 10:00:00 | quarantine not required | Molecular test | Humber River Hospital    | yes
+ 123456002 | 2020-10-31 10:30:00 | quarantine for 1 week   | Antigen test   | Mount Sinai Hospital     | yes
+ 123456003 | 2020-10-31 11:00:00 | quarantine for 2 weeks  | Antibody test  | Toronto General Hospital | yes
+ 123456004 | 2020-10-31 11:30:00 | quarantine for 2 weeks  | Molecular test | Humber River Hospital    | yes
+ 123456005 | 2020-10-31 12:00:00 | quarantine for 1 week   | Antigen test   | Mount Sinai Hospital     | yes
+ 123456006 | 2020-10-31 12:30:00 | quarantine not required | Antibody test  | Toronto General Hospital | yes

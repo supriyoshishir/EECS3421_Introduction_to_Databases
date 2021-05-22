@@ -1,0 +1,20 @@
+WITH
+
+Success (theme, quests) AS
+(SELECT q.theme, count(*)
+FROM Quest q
+WHERE q.succeeded IS NOT NULL
+GROUP BY q.theme),
+
+Count (theme, quests) AS
+(SELECT q.theme, count(*)
+FROM Quest q
+GROUP BY q.theme)
+
+SELECT q.theme, s.quests
+FROM Quest q, Success s, Count c
+WHERE q.theme = s.theme
+AND q.theme = c.theme
+AND s.quests = c.quests
+GROUP BY q.theme, s.quests
+ORDER BY q.theme;
